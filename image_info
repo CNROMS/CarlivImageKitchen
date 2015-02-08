@@ -16,7 +16,7 @@ cd "$PWD";
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.1          *
+*        $cy Carliv Image Kitchen for Android$c v0.2          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *

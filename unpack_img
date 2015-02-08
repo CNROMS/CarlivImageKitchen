@@ -16,7 +16,7 @@ cd "$PWD";
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.1          *
+*        $cy Carliv Image Kitchen for Android$c v0.2          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *
@@ -148,7 +148,7 @@ cd ramdisk;
 ###########################################################
 if [ "$compress" == "gz" ];
 	then
-	gzip -dc "../$wimage-ramdisk.gz" | cpio -i ;
+	gzip -dcv "../$wimage-ramdisk.gz" | cpio -i ;
 	if [ ! $? -eq "0" ]; 
 	then
 	  echo -e "$r Your ramdisk archive is corrupt. Are you trying to unpack a$c$cy MTK$c$r image with regular script?$c\n$r If so, please use$c$y unpack_MTK_img$c$r script. ERROR!$c";
@@ -161,7 +161,7 @@ if [ "$compress" == "gz" ];
 fi;
 if [ "$compress" == "lzma" ];
 	then
-	xz -dc "../$wimage-ramdisk.lzma" | cpio -i ;
+	xz -dcv "../$wimage-ramdisk.lzma" | cpio -i ;
 	if [ ! $? -eq "0" ]; 
 	then
 	  echo -e "$r Your ramdisk archive is corrupt. Are you trying to unpack a$c$cy MTK$c$r image with regular script?$c\n$r If so, please use$c$y unpack_MTK_img$c$r script. ERROR!$c";
@@ -174,7 +174,7 @@ if [ "$compress" == "lzma" ];
 fi;
 if [ "$compress" == "xz" ];
 	then
-	xz -dc "../$wimage-ramdisk.xz" | cpio -i ;
+	xz -dcv "../$wimage-ramdisk.xz" | cpio -i ;
 	if [ ! $? -eq "0" ]; 
 	then
 	  echo -e "$r Your ramdisk archive is corrupt. Are you trying to unpack a$c$cy MTK$c$r image with regular script?$c\n$r If so, please use$c$y unpack_MTK_img$c$r script. ERROR!$c";
@@ -187,7 +187,7 @@ if [ "$compress" == "xz" ];
 fi;
 if [ "$compress" == "bz2" ];
 	then
-	bzip2 -dc "../$wimage-ramdisk.bz2" | cpio -i ;
+	bzip2 -dcv "../$wimage-ramdisk.bz2" | cpio -i ;
 	if [ ! $? -eq "0" ]; 
 	then
 	  echo -e "$r Your ramdisk archive is corrupt. Are you trying to unpack a$c$cy MTK$c$r image with regular script?$c\n$r If so, please use$c$y unpack_MTK_img$c$r script. ERROR!$c";

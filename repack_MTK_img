@@ -16,7 +16,7 @@ cd "$PWD";
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.1          *
+*        $cy Carliv Image Kitchen for Android$c v0.2          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *
@@ -64,7 +64,7 @@ echo " ";
 ###########################################################
 if [ "$compress" == "gz" ];
 	then
-	"$bin"/mkbootfs ramdisk | gzip > "$myname".img-ramdisk.gz;
+	"$bin"/mkbootfs ramdisk | gzip -9v > "$myname".img-ramdisk.gz;
 	ramdisk="$myname".img-ramdisk.gz;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -76,7 +76,7 @@ if [ "$compress" == "gz" ];
 fi;
 if [ "$compress" == "lzma" ];
 	then
-	"$bin"/mkbootfs ramdisk | xz -Flzma > "$myname".img-ramdisk.lzma;
+	"$bin"/mkbootfs ramdisk | xz -1zv -Flzma > "$myname".img-ramdisk.lzma;
 	ramdisk="$myname".img-ramdisk.lzma;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -88,7 +88,7 @@ if [ "$compress" == "lzma" ];
 fi;
 if [ "$compress" == "xz" ];
 	then
-	"$bin"/mkbootfs ramdisk | xz -1 -Ccrc32 > "$myname".img-ramdisk.xz;
+	"$bin"/mkbootfs ramdisk | xz -1zv -Ccrc32 > "$myname".img-ramdisk.xz;
 	ramdisk="$myname".img-ramdisk.xz;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -100,7 +100,7 @@ if [ "$compress" == "xz" ];
 fi;
 if [ "$compress" == "bz2" ];
 	then
-	"$bin"/mkbootfs ramdisk | bzip2 > "$myname".img-ramdisk.bz2;
+	"$bin"/mkbootfs ramdisk | bzip2 -9zv > "$myname".img-ramdisk.bz2;
 	ramdisk="$myname".img-ramdisk.bz2;
 	echo "The ramdisk is: $ramdisk";
 	if [ ! $? -eq "0" ]; 
@@ -154,8 +154,9 @@ fi;
 ###################### SECOND OFFSET ########################
 if [[ -f "$myname".img-second_offset ]];
 	then
-	losec=$(cat "$myname".img-second_offset);
-	echo -e "Second offset:$y     $losec$c";echo " ";	
+	flsec=$(cat "$myname".img-second_offset);
+	losec=" --second_offset $flsec";
+	echo -e "Second offset:$y     $flsec$c";echo " ";	
 fi;
 #################### SECOND BOOTLOADER ######################
 if [[ -f "$myname".img-second ]];
@@ -204,7 +205,7 @@ fi;
 echo " ";
 echo "Executing the repacking command...."
 echo " ";
-"$bin"/mtkbootimg --kernel "$kernel" --ramdisk "$ramdisk" --pagesize "$pagesize" --cmdline "$lcmd" --board "$bname" --base "$base" --kernel_offset "$keoff" --ramdisk_offset "$ramoff" --tags_offset "$tagoff" --second_offset "$losec"$second$dtb -o ../"$newimage".img;
+"$bin"/mtkbootimg --kernel "$kernel" --ramdisk "$ramdisk" --pagesize "$pagesize" --cmdline "$lcmd" --board "$bname" --base "$base" --kernel_offset "$keoff" --ramdisk_offset "$ramoff" --tags_offset "$tagoff"$losec$second$dtb -o ../"$newimage".img;
 if [ ! $? -eq "0" ]; 
 	then
 	abort;

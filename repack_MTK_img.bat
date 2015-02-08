@@ -115,7 +115,7 @@ echo(
 if not exist "%file%.img-second_offset" goto nosecoff
 for /f "delims=" %%a in (%file%.img-second_offset) do @set fsecoff=!fsecoff!%%a
 echo Second offset:%yellow%     %fsecoff%%deft% | klr
-set secoff=--second_offset %fsecoff%
+set "secoff=--second_offset %fsecoff%"
 echo(
 :nosecoff
 if not exist "%file%.img-second" goto nosecd

@@ -6,8 +6,9 @@
 :::                                                    :::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @echo off
-cd %~dp0
+cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
+chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 setlocal enabledelayedexpansion
 set "red=\033[91m"
@@ -17,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.1          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
@@ -30,15 +31,14 @@ if "%~1" == "" goto noinput
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Your image:%yellow% %~nx1 %deft% | klr
 set "yfile=%~n1"
-if not "%yfile%"=="%yfile:boot=%" goto boot
-if not "%yfile%"=="%yfile:recovery=%" goto recovery
-:boot
+if "%yfile%"=="%yfile:boot=%" goto recovery
 if exist "boot.img" copy "boot.img" "bckp-boot.img" >nul
 copy %~nx1  boot.img >nul
 set "file=boot.img"
 goto unpack
 echo(
 :recovery
+if "%yfile%"=="%yfile:recovery=%" goto error
 if exist "recovery.img" copy "recovery.img" "bckp-recovery.img" >nul
 copy %~nx1  recovery.img >nul
 set "file=recovery.img"
@@ -53,7 +53,6 @@ echo(
 set "folder=%~n1"
 for /d /r . %%d in (%folder%) do @if exist "%%d" rd /s/q "%%d"
 md %folder%
-icacls %folder% /grant Everyone:(IO)(CI)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Unpacking the%yellow% %~nx1 %deft%to%yellow% %folder% %deft%folder. | klr
 echo(
@@ -67,6 +66,7 @@ type nul > %file%-ramdisk-compress
 echo %ext:~1% > "%file%-ramdisk-compress"
 echo(
 md ramdisk
+chmod 755 ramdisk
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Unpacking the ramdisk....
 echo(
@@ -75,7 +75,7 @@ echo(
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :gz
 cd ramdisk
-gzip -dc "../%file%-ramdisk.gz" | cpio -i
+gzip -dcv "../%file%-ramdisk.gz" | cpio -i
 if errorlevel == 1 goto ziperror
 cd ..\
 del "%file%-ramdisk.gz"
@@ -87,7 +87,7 @@ goto end
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :lzma
 cd ramdisk
-xz -dc "../%file%-ramdisk.lzma" | cpio -i
+xz -dcv "../%file%-ramdisk.lzma" | cpio -i
 if errorlevel == 1 goto ziperror
 cd ..\
 del "%file%-ramdisk.lzma"
@@ -99,7 +99,7 @@ goto end
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :xz
 cd ramdisk
-xz -dc "../%file%-ramdisk.xz" | cpio -i
+xz -dcv "../%file%-ramdisk.xz" | cpio -i
 if errorlevel == 1 goto ziperror
 cd ..\
 del "%file%-ramdisk.xz"
@@ -111,7 +111,7 @@ goto end
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :bz2
 cd ramdisk
-bzip2 -dc "../%file%-ramdisk.bz2" | cpio -i
+bzip2 -dcv "../%file%-ramdisk.bz2" | cpio -i
 if errorlevel == 1 goto ziperror
 cd ..\
 del "%file%-ramdisk.bz2"
@@ -124,7 +124,7 @@ goto end
 :error
 echo(
 echo(
-echo %red%Your image name doesn't contain the words%yellow% boot%red% or%yellow% recovery%red%. You can't use this tool for other type of images. Exit script.%deft% | klr
+echo %red%Your image name doesn't contain the words%yellow% boot%red% or%yellow% recovery%red%. Don't use this tool for other type of images, or rename your boot and recovery including the type in name. Exit script.%deft% | klr
 echo(
 echo(
 goto end

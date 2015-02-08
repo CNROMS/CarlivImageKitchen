@@ -6,8 +6,9 @@
 :::                                                    :::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @echo off
-cd %~dp0
+cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
+chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 setlocal enabledelayedexpansion
 set "red=\033[91m"
@@ -17,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.1          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
@@ -27,12 +28,10 @@ echo **********************************************************
 echo(
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 if "%~nx1" == "" goto noinput
-echo You have selected the%yellow% %~nx1 %deft%folder. | klr
 echo(
 echo Processing the%yellow% %~nx1 folder%deft%. | klr
 echo(
 set "folder=%~nx1"
-icacls %folder% /grant Everyone:(IO)(CI)
 cd %folder%
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo(
@@ -54,28 +53,28 @@ echo(
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :gz
 echo(
-mkbootfs ramdisk | gzip > %file%.img-ramdisk.gz
+mkbootfs ramdisk | gzip -9v > %file%.img-ramdisk.gz
 set ramdisk=!ramdisk!%file%.img-ramdisk.gz
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :lzma
 echo(
-mkbootfs ramdisk | xz -Flzma > %file%.img-ramdisk.lzma
+mkbootfs ramdisk | xz -1zv -Flzma > %file%.img-ramdisk.lzma
 set ramdisk=!ramdisk!%file%.img-ramdisk.lzma
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :xz
 echo(
-mkbootfs ramdisk | xz -1 -Ccrc32 > %file%.img-ramdisk.xz
+mkbootfs ramdisk | xz -1zv -Ccrc32 > %file%.img-ramdisk.xz
 set ramdisk=!ramdisk!%file%.img-ramdisk.xz
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :bz2
 echo(
-mkbootfs ramdisk | bzip2 > %file%.img-ramdisk.bz2
+mkbootfs ramdisk | bzip2 -9zv > %file%.img-ramdisk.bz2
 set ramdisk=!ramdisk!%file%.img-ramdisk.bz2
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
@@ -168,7 +167,7 @@ goto end
 :wrongname
 echo(
 echo(
-echo %red%The name have to include the type of image in it, %yellow%boot%red% or%yellow% recovery%red%.%deft% | klr
+echo %red%The name must include the type of image in it, %yellow%boot%red% or%yellow% recovery%red%.%deft% | klr
 echo(
 goto newimage
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

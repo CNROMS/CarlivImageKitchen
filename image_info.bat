@@ -6,8 +6,9 @@
 :::                                                    :::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 @echo off
-cd %~dp0
+cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
+chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 setlocal enabledelayedexpansion
 set "red=\033[91m"
@@ -17,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.1          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
@@ -29,7 +30,6 @@ echo(
 if "%~1" == "" goto noinput
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 set "file=%~nx1"
-echo Your image:%yellow% %~nx1 | klr
 echo(
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Display the informations for%yellow% %file%%deft%. | klr

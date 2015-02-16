@@ -12,11 +12,12 @@ abort() { cd "$PWD"; echo " "; echo -e "$cy >>$c$r Exit script$c\n"; }
 bin="$PWD/.bin";
 chmod -R 755 "$bin"/*;
 cd "$PWD";
+imageinfo=$bin/imageinfo;
 ###########################################################
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.2          *
+*        $cy Carliv Image Kitchen for Android$c v0.3          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *
@@ -39,6 +40,6 @@ echo " ";
 ###########################################################
 echo -e "Display the informations for $y $file$c";
 echo " ";
-"$bin"/imageinfo "$file";
+$imageinfo "$file";
 echo "Done!";
 echo " ";

@@ -11,7 +11,7 @@ cd "$PWD";
 echo " ";
 echo "**********************************************************";
 echo "*                                                        *";
-echo "*         Carliv Image Kitchen for Android v0.2          *";
+echo "*         Carliv Image Kitchen for Android v0.3          *";
 echo "*     boot+recovery images copyright-2015 carliv@xda     *";
 echo "*    including support for MTK powered phones images     *";
 echo "*                      LINUX version                     *";

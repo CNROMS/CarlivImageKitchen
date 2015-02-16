@@ -12,11 +12,13 @@ abort() { cd "$PWD"; echo " "; echo -e "$cy >>$c$r Exit script$c\n"; }
 bin="$PWD/.bin";
 chmod -R 755 "$bin"/*;
 cd "$PWD";
+unpackmtkimg=$bin/unpackmtkimg;
+bzip2=$bin/bzip2;
 ###########################################################
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.2          *
+*        $cy Carliv Image Kitchen for Android$c v0.3          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *
@@ -98,7 +100,7 @@ if [[ -z "$wimage" ]];
 fi;
 echo -e "Unpacking the$y $file$c to$y $filename$c folder...."
 echo " ";
-"$bin"/unpackmtkimg -i "$wimage" -o "$filename";
+$unpackmtkimg -i "$wimage" -o "$filename";
 if [ "$wimage" == "boot.img" ];
 	then
 	rm -f boot.img;
@@ -187,7 +189,7 @@ if [ "$compress" == "xz" ];
 fi;
 if [ "$compress" == "bz2" ];
 	then
-	bzip2 -dcv "../$wimage-ramdisk.bz2" | cpio -i ;
+	$bzip2 -dcv "../$wimage-ramdisk.bz2" | cpio -i ;
 	if [ ! $? -eq "0" ]; 
 	then
 	  echo -e "$r Your ramdisk archive is corrupt. Are you trying to unpack a regular image with$c$cy MTK$c$r script?$c\n$r If so, please use$c$y unpack_img$c$r script. ERROR!$c";

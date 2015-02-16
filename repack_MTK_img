@@ -12,11 +12,15 @@ abort() { cd "$PWD"; echo " "; echo -e "$cy >>$c$r Exit script$c\n"; }
 bin="$PWD/.bin";
 chmod -R 755 "$bin"/*;
 cd "$PWD";
+mkbootfs=$bin/mkbootfs;
+minigzip=$bin/minigzip;
+mtkbootimg=$bin/mtkbootimg;
+bzip2=$bin/bzip2;
 ###########################################################
 echo -e "
 **********************************************************
 *                                                        *
-*        $cy Carliv Image Kitchen for Android$c v0.2          *
+*        $cy Carliv Image Kitchen for Android$c v0.3          *
 *     boot+recovery images copyright-2015$cy carliv@xda$c     *
 *    including support for MTK powered phones images     *
 *                      LINUX version                     *
@@ -64,7 +68,7 @@ echo " ";
 ###########################################################
 if [ "$compress" == "gz" ];
 	then
-	"$bin"/mkbootfs ramdisk | gzip -9v > "$myname".img-ramdisk.gz;
+	$mkbootfs ramdisk | $minigzip -c -9 > "$myname".img-ramdisk.gz;
 	ramdisk="$myname".img-ramdisk.gz;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -76,7 +80,7 @@ if [ "$compress" == "gz" ];
 fi;
 if [ "$compress" == "lzma" ];
 	then
-	"$bin"/mkbootfs ramdisk | xz -1zv -Flzma > "$myname".img-ramdisk.lzma;
+	$mkbootfs ramdisk | xz -1zv -Flzma > "$myname".img-ramdisk.lzma;
 	ramdisk="$myname".img-ramdisk.lzma;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -88,7 +92,7 @@ if [ "$compress" == "lzma" ];
 fi;
 if [ "$compress" == "xz" ];
 	then
-	"$bin"/mkbootfs ramdisk | xz -1zv -Ccrc32 > "$myname".img-ramdisk.xz;
+	$mkbootfs ramdisk | xz -1zv -Ccrc32 > "$myname".img-ramdisk.xz;
 	ramdisk="$myname".img-ramdisk.xz;
 	echo -e "The ramdisk is:$y $ramdisk$c";
 	if [ ! $? -eq "0" ]; 
@@ -100,7 +104,7 @@ if [ "$compress" == "xz" ];
 fi;
 if [ "$compress" == "bz2" ];
 	then
-	"$bin"/mkbootfs ramdisk | bzip2 -9zv > "$myname".img-ramdisk.bz2;
+	$mkbootfs ramdisk | $bzip2 -9z > "$myname".img-ramdisk.bz2;
 	ramdisk="$myname".img-ramdisk.bz2;
 	echo "The ramdisk is: $ramdisk";
 	if [ ! $? -eq "0" ]; 
@@ -205,7 +209,7 @@ fi;
 echo " ";
 echo "Executing the repacking command...."
 echo " ";
-"$bin"/mtkbootimg --kernel "$kernel" --ramdisk "$ramdisk" --pagesize "$pagesize" --cmdline "$lcmd" --board "$bname" --base "$base" --kernel_offset "$keoff" --ramdisk_offset "$ramoff" --tags_offset "$tagoff"$losec$second$dtb -o ../"$newimage".img;
+$mtkbootimg --kernel "$kernel" --ramdisk "$ramdisk" --pagesize "$pagesize" --cmdline "$lcmd" --board "$bname" --base "$base" --kernel_offset "$keoff" --ramdisk_offset "$ramoff" --tags_offset "$tagoff"$losec$second$dtb -o ../"$newimage".img;
 if [ ! $? -eq "0" ]; 
 	then
 	abort;

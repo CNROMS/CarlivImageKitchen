@@ -10,7 +10,7 @@ cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
 chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-setlocal enabledelayedexpansion
+Setlocal EnableDelayedExpansion
 set "red=\033[91m"
 set "cyan=\033[96m"
 set "yellow=\033[93m"
@@ -18,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.3          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
@@ -51,7 +51,7 @@ echo(
 echo Create the%yellow% %~n1 %deft%folder. | klr
 echo(
 set "folder=%~n1"
-for /d /r . %%d in (%folder%) do @if exist "%%d" rd /s/q "%%d"
+for /d /r . %%d in (%folder%) do if exist "%%d" rd /s/q "%%d"
 md %folder%
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 echo Unpacking the%yellow% %~nx1 %deft%to%yellow% %folder% %deft%folder. | klr
@@ -60,7 +60,7 @@ unpackmtkimg -i %file% -o %folder%
 if exist %file% del %file% >nul
 if exist "bckp-%file%" ren "bckp-%file%" %file% >nul
 cd %folder%
-for %%a in ("%file%-ramdisk.*") do @set ext=%%~xa
+for %%a in ("%file%-ramdisk.*") do set ext=%%~xa
 echo Compression used:%yellow% %ext:~1% %deft% | klr
 type nul > %file%-ramdisk-compress
 echo %ext:~1% > "%file%-ramdisk-compress"

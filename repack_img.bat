@@ -10,7 +10,7 @@ cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
 chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-setlocal enabledelayedexpansion
+Setlocal EnableDelayedExpansion
 set "red=\033[91m"
 set "cyan=\033[96m"
 set "yellow=\033[93m"
@@ -18,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.3          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
@@ -37,7 +37,7 @@ cd %folder%
 echo(
 echo Repacking the image....
 echo(
-for /f "delims=" %%a in ('dir /b *-kernel') do @set nfile=!nfile!%%~na
+for /f "delims=" %%a in ('dir /b *-kernel') do set nfile=!nfile!%%~na
 set "file=%nfile%"
 if not exist "%file%.img-kernel" goto error
 set kernel=!kernel!%file%.img-kernel
@@ -46,14 +46,14 @@ echo(
 echo Getting the ramdisk compression....
 echo(
 if not exist "ramdisk" goto error
-for /f "delims=" %%a in (%file%.img-ramdisk-compress) do @set compress=!compress!%%a
+for /f "delims=" %%a in (%file%.img-ramdisk-compress) do set compress=!compress!%%a
 echo Ramdisk compression:%yellow% %compress%%deft% | klr
 goto %compress%
 echo(
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :gz
 echo(
-mkbootfs ramdisk | gzip -9v > %file%.img-ramdisk.gz
+mkbootfs ramdisk | minigzip -9 > %file%.img-ramdisk.gz
 set ramdisk=!ramdisk!%file%.img-ramdisk.gz
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
@@ -74,7 +74,7 @@ goto repack
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :bz2
 echo(
-mkbootfs ramdisk | bzip2 -9zv > %file%.img-ramdisk.bz2
+mkbootfs ramdisk | bzip2 -9z > %file%.img-ramdisk.bz2
 set ramdisk=!ramdisk!%file%.img-ramdisk.bz2
 echo The ramdisk is:%yellow%      %ramdisk%%deft% | klr
 goto repack
@@ -85,35 +85,35 @@ echo(
 echo Getting the image repacking arguments....
 echo(
 if not exist "%file%.img-board" goto noboard
-for /f "delims=" %%a in (%file%.img-board) do @set nameb=!nameb!%%a
+for /f "delims=" %%a in (%file%.img-board) do set nameb=!nameb!%%a
 echo Board:%yellow%             '%nameb%'%deft% | klr
 echo(
 :noboard
 if not exist "%file%.img-base" goto nobase
-for /f "delims=" %%a in (%file%.img-base) do @set base=!base!%%a
+for /f "delims=" %%a in (%file%.img-base) do set base=!base!%%a
 echo Base:%yellow%              %base%%deft% | klr
 echo(
 :nobase
-for /f "delims=" %%a in (%file%.img-pagesize) do @set pagesize=!pagesize!%%a
+for /f "delims=" %%a in (%file%.img-pagesize) do set pagesize=!pagesize!%%a
 echo Pagesize:%yellow%          %pagesize%%deft% | klr
 echo(
 if not exist "%file%.img-cmdline" goto nocmdline
-for /f "delims=" %%a in (%file%.img-cmdline) do @set scmdline=!scmdline!%%a
+for /f "delims=" %%a in (%file%.img-cmdline) do set scmdline=!scmdline!%%a
 echo Command line:%yellow%      '%scmdline%'%deft% | klr
 echo(
 :nocmdline
 if not exist "%file%.img-kernel_offset" goto nokoff
-for /f "delims=" %%a in (%file%.img-kernel_offset) do @set koff=!koff!%%a
+for /f "delims=" %%a in (%file%.img-kernel_offset) do set koff=!koff!%%a
 echo Kernel offset:%yellow%     %koff%%deft% | klr
 echo(
 :nokoff
 if not exist "%file%.img-ramdisk_offset" goto noramoff
-for /f "delims=" %%a in (%file%.img-ramdisk_offset) do @set ramoff=!ramoff!%%a
+for /f "delims=" %%a in (%file%.img-ramdisk_offset) do set ramoff=!ramoff!%%a
 echo Ramdisk offset:%yellow%    %ramoff%%deft% | klr
 echo(
 :noramoff
 if not exist "%file%.img-second_offset" goto nosecoff
-for /f "delims=" %%a in (%file%.img-second_offset) do @set fsecoff=!fsecoff!%%a
+for /f "delims=" %%a in (%file%.img-second_offset) do set fsecoff=!fsecoff!%%a
 echo Second offset:%yellow%     %fsecoff%%deft% | klr
 set "secoff=--second_offset %fsecoff%"
 echo(
@@ -125,7 +125,7 @@ set "second=--second %fsecd%"
 echo(
 :nosecd
 if not exist "%file%.img-tags_offset" goto notagoff
-for /f "delims=" %%a in (%file%.img-tags_offset) do @set tagoff=!tagoff!%%a
+for /f "delims=" %%a in (%file%.img-tags_offset) do set tagoff=!tagoff!%%a
 echo Tags offset:%yellow%       %tagoff%%deft% | klr
 echo(
 :notagoff
@@ -140,6 +140,7 @@ echo(
 echo Please enter the desired name for the new repacked image without extension (img). Like this %yellow%boot%deft%-stock-2201 or carliv-%yellow%recovery%deft%-30 or %yellow%boot%deft%-new. | klr
 set /P newimage=Insert the name here: || set newimage="0"
 if "%newimage%"=="0" goto noimage
+for /f "delims=." %%i in ("%newimage%") do set "newimage=%%i"
 if not "%newimage%"=="%newimage:boot=%" goto command
 if not "%newimage%"=="%newimage:recovery=%" goto command
 goto wrongname

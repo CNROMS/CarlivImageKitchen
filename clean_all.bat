@@ -10,7 +10,7 @@ cd "%~dp0"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
 chmod -R 755 bin
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-setlocal enabledelayedexpansion
+Setlocal EnableDelayedExpansion
 set "red=\033[31m"
 set "cyan=\033[96m"
 set "yellow=\033[43m"
@@ -18,7 +18,7 @@ set "deft=\033[0m"
 echo(    
 echo **********************************************************
 echo *                                                        *
-echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.2          * | klr
+echo *         %cyan%Carliv Image Kitchen for Android %deft%v0.3          * | klr
 echo *     boot+recovery images copyright-2015 %cyan%carliv@xda%deft%     * | klr
 echo *    including support for MTK powered phones images     *
 echo *                     WINDOWS version                    *
